@@ -1,0 +1,6 @@
+@NotifyApi_HostAddress = http://localhost:8403
+
+GET {{NotifyApi_HostAddress}}/messages
+Accept: application/json
+
+###

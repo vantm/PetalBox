@@ -1,0 +1,63 @@
+version: 1
+common:
+  resourcesPath: ./components
+  env:
+    ASPNETCORE_ENVIRONMENT: Development
+
+apps:
+  - appDirPath: ./ProductApi
+    appID: product-api
+    appPort: 8401
+    appHealthCheckPath: /hc
+    appLogDestination: console
+    daprdLogDestination: console
+    enableAppHealthCheck: true
+    enableProfiling: true
+    command:
+      - dotnet
+      - watch
+      - run
+      - --no-hot-reload
+      - --no-interactive
+  - appDirPath: ./OrderApi
+    appID: order-api
+    appPort: 8402
+    appHealthCheckPath: /hc
+    appLogDestination: console
+    daprdLogDestination: console
+    enableAppHealthCheck: true
+    enableProfiling: true
+    command:
+      - dotnet
+      - watch
+      - run
+      - --no-hot-reload
+      - --no-interactive
+  - appDirPath: ./MessageApi
+    appID: message-api
+    appPort: 8403
+    appHealthCheckPath: /hc
+    appLogDestination: console
+    daprdLogDestination: console
+    enableAppHealthCheck: true
+    enableProfiling: true
+    command:
+      - dotnet
+      - watch
+      - run
+      - --no-hot-reload
+      - --no-interactive
+  - appDirPath: ./PublicApi
+    appID: public-api
+    appPort: 8499
+    appHealthCheckPath: /hc
+    appLogDestination: console
+    daprdLogDestination: console
+    enableAppHealthCheck: true
+    enableProfiling: true
+    command:
+      - dotnet
+      - watch
+      - run
+      - --no-hot-reload
+      - --no-interactive

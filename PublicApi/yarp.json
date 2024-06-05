@@ -1,0 +1,45 @@
+{
+  "Yarp": {
+    "Routes": {
+      "product-api-list-or-create-product": {
+        "ClusterId": "productApi",
+        "Match": {
+          "Path": "/products",
+          "Methods": [ "GET", "POST" ]
+        }
+      },
+      "product-api-find-product": {
+        "ClusterId": "productApi",
+        "Match": {
+          "Path": "/products/{id}",
+          "Methods": [ "GET" ]
+        }
+      },
+      "product-api-create-adjustment": {
+        "ClusterId": "productApi",
+        "Match": {
+          "Path": "/adjustments",
+          "Methods": [ "POST" ]
+        }
+      },
+      "product-api-find-adjustment": {
+        "ClusterId": "productApi",
+        "Match": {
+          "Path": "/adjustments/{id}",
+          "Methods": [ "GET" ]
+        }
+      }
+    },
+    "Clusters": {
+      "productApi": {
+        "MetaData": { "DaprAppId": "product-api" }
+      },
+      "orderApi": {
+        "MetaData": { "DaprAppId": "product-api" }
+      },
+      "messageApi": {
+        "MetaData": { "DaprAppId": "message-api" }
+      }
+    }
+  }
+}

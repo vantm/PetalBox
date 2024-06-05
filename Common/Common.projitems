@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>3674a744-6491-40cc-bf70-5400363746aa</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Common</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AggregateRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommonServicesRegistration.cs" />
+    <Compile Include="..\Common\ServiceBusExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DaprExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DomainEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EitherExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IAggregateRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDomainEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Implements\DaprServiceBus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IServiceBus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IServicesRegistration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SelectParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServiceCollectionExtensions.cs" />
+  </ItemGroup>
+</Project>
