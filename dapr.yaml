@@ -12,7 +12,7 @@ apps:
     appLogDestination: console
     daprdLogDestination: console
     enableAppHealthCheck: true
-    enableProfiling: true
+    enableProfiling: false
     command:
       - dotnet
       - watch
@@ -26,7 +26,7 @@ apps:
     appLogDestination: console
     daprdLogDestination: console
     enableAppHealthCheck: true
-    enableProfiling: true
+    enableProfiling: false
     command:
       - dotnet
       - watch
@@ -40,7 +40,7 @@ apps:
     appLogDestination: console
     daprdLogDestination: console
     enableAppHealthCheck: true
-    enableProfiling: true
+    enableProfiling: false
     command:
       - dotnet
       - watch
@@ -54,7 +54,7 @@ apps:
     appLogDestination: console
     daprdLogDestination: console
     enableAppHealthCheck: true
-    enableProfiling: true
+    enableProfiling: false
     command:
       - dotnet
       - watch

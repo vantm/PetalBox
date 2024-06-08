@@ -12,6 +12,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)AggregateRoot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonServicesRegistration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PageParams.cs" />
+    <Compile Include="..\Common\PageParamsValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ValidationError.cs" />
+    <Compile Include="..\Common\AppErrors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ErrorHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HasServiceProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WebRuntime.cs" />
+    <Compile Include="..\Common\Runtime.cs" />
     <Compile Include="..\Common\ServiceBusExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DaprExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DomainEvent.cs" />

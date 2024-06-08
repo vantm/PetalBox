@@ -4,7 +4,7 @@ namespace Common;
 
 public abstract class AggregateRoot<T> : IAggregateRoot
 {
-    public T Id { get; protected set; }
+    public T Id { get; protected set; } = default!;
 
     [JsonIgnore]
     private readonly IList<IDomainEvent> _events = [];

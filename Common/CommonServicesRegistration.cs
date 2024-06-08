@@ -14,5 +14,9 @@ public class CommonServicesRegistration : IServicesRegistration
             .AddOptionsWithValidateOnStart<CommonOptions>()
             .BindConfiguration(CommonOptions.Name)
             .ValidateDataAnnotations();
+
+        services.AddHttpContextAccessor();
+
+        services.AddScoped<WebRuntime>();
     }
 }

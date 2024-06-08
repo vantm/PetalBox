@@ -1,4 +1,5 @@
 ﻿using Carter;
+using Microsoft.AspNetCore.Mvc;
 using ProductApi.Products.Endpoints;
 
 namespace ProductApi.Products;
@@ -12,20 +13,29 @@ public class ProductModule : CarterModule
 
     public override void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("", ([AsParameters] ListProductEndpoint ep) => ep.Handle())
-           .WithName(nameof(ListProductEndpoint))
-           .WithOpenApi();
+        app.MapGet(
+                "",
+                ([AsParameters] PageParams qs, [FromServices] WebRuntime rt) =>
+                    rt.RunAff(ListProductEndpoint<Runtime>.New(qs))
+            );
 
-        app.MapGet("{id:guid}", ([AsParameters] GetProductEndpoint ep) => ep.Handle())
-           .WithName(nameof(GetProductEndpoint))
-           .WithOpenApi();
+        app.MapGet(
+                "{id:guid}",
+                (Guid id, WebRuntime rt) =>
+                    rt.RunAff(GetProductEndpoint<Runtime>.New(id))
+            )
+           .WithName("GetProduct");
 
-        app.MapPost("", ([AsParameters] CreateProductEndpoint ep) => ep.Handle())
-           .WithName(nameof(CreateProductEndpoint))
-           .WithOpenApi();
+        app.MapPost(
+                "",
+                (CreateProductRequest body, WebRuntime rt) =>
+                    rt.RunAff(CreateProductEndpoint<Runtime>.New(body))
+            );
 
-        app.MapPost("{id:guid}/quantity", ([AsParameters] AdjustProductEndpoint ep) => ep.Handle())
-           .WithName(nameof(AdjustProductEndpoint))
-           .WithOpenApi();
+        app.MapPost(
+                "{id:guid}/quantity",
+                (Guid id, AdjustProductRequest body, WebRuntime rt) =>
+                    rt.RunAff(AdjustProductEndpoint<Runtime>.New(id, body))
+            );
     }
 }

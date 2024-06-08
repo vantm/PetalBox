@@ -1,4 +1,5 @@
-﻿using ProductApi.Products.Domain;
+﻿using LanguageExt.Effects.Traits;
+using ProductApi.Products.Domain;
 
 namespace ProductApi.Products.Endpoints;
 
@@ -8,42 +9,28 @@ public class CreateProductRequest
     public decimal Price { get; init; }
 }
 
-public record CreateProductEndpoint(
-    CreateProductRequest Body,
-    IValidator<CreateProductRequest> Validator,
-    IProductRepo Repo,
-    TimeProvider Time,
-    CancellationToken CancelToken)
+public class CreateProductValidator : AbstractValidator<CreateProductRequest>
 {
-    public Task<IResult> Handle()
+    public CreateProductValidator()
     {
-        var validationResult = Validator.Validate(Body);
-        return EitherWithError(Body)
-            .LeftWhen(isDefault, () => Error.New("Body.Null"))
-            .LeftWhen(!validationResult.IsValid, () => Error.New("ValidationError"))
-            .Map(x => Product.New(x.Title, x.Price, Time))
-            .MapAsync(async product =>
-            {
-                await Repo.InsertAsync(product, CancelToken);
-                return product;
-            })
-            .Match(p => Results.CreatedAtRoute("GetProduct", new { p.Id }, p), (e) =>
-            {
-                if (e.Message.Contains("ValidationError"))
-                {
-                    return Results.ValidationProblem(validationResult.ToDictionary());
-                }
-                return Results.BadRequest(e.Message);
-            });
+        RuleFor(x => x.Title).NotEmpty().MinimumLength(6).MaximumLength(200);
+        RuleFor(x => x.Price).LessThan(1_000_000).GreaterThan(-1_000_000);
     }
+}
 
-    public class EndpointValidator : AbstractValidator<CreateProductRequest>
-    {
-        public EndpointValidator()
-        {
-            RuleFor(x => x.Title).NotEmpty().MinimumLength(6).MaximumLength(200);
-            RuleFor(x => x.Price).LessThan(1_000_000).GreaterThan(-1_000_000);
-        }
-    }
+public readonly struct CreateProductEndpoint<RT>
+    where RT : struct, HasCancel<RT>, HasServiceProvider
+{
+    public static Aff<RT, IResult> New(CreateProductRequest body) =>
+        from rt in runtime<RT>()
+        from __0 in guard(notnull(body), () => AppErrors.ValidationError("Body", "The request body must not be null"))
+        from validator in rt.RequiredService<IValidator<CreateProductRequest>>()
+        from validationResult in SuccessEff(validator.Validate(body))
+        from __1 in guard(validationResult.IsValid, AppErrors.ValidationError(validationResult.ToDictionary()))
+        from time in rt.RequiredService<TimeProvider>()
+        from product in SuccessEff(Product.New(body.Title, body.Price, time))
+        from repo in rt.RequiredService<IProductRepo<RT>>()
+        from res in repo.insert(product)
+        select Results.CreatedAtRoute("GetProduct", new { product.Id }, product);
 }
 

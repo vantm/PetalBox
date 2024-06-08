@@ -7,7 +7,7 @@ public class ProductServicesRegistration : IServicesRegistration
 {
     public void Add(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        services.AddScoped<IProductRepo, DaprProductRepo>();
+        services.AddSingleton(typeof(IProductRepo<>), typeof(DaprProductRepo<>));
         services.AddSingleton<DaprProductRepoHelper>();
     }
 }

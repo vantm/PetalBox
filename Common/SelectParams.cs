@@ -2,11 +2,11 @@
 
 public record SelectParams(int Offset, int Limit)
 {
-    public static SelectParams FromPaging(int? page, int? size)
+    public static SelectParams FromPaging(PageParams pageParams)
     {
-        page ??= 1;
-        size ??= 20;
-        var offset = (page - 1) * size;
-        return new(offset.Value, size.Value);
+        var page = pageParams.Page ?? 1;
+        var limit = pageParams.Limit ?? 20;
+        var offset = (page - 1) * limit;
+        return new(offset, limit);
     }
 }

@@ -1,16 +1,12 @@
-﻿namespace ProductApi.Products.Domain;
+﻿using LanguageExt.Effects.Traits;
 
-public interface IProductRepo
+namespace ProductApi.Products.Domain;
+
+public interface IProductRepo<RT>
+    where RT : struct, HasCancel<RT>, HasServiceProvider
 {
-    Task<Either<Error, IEnumerable<Product>>> SelectAsync(
-        SelectParams @params, CancellationToken cancellationToken = default);
-
-    Task<Either<Error, Product>> FindAsync(
-        Guid id, CancellationToken cancellationToken = default);
-
-    Task<Either<Error, Unit>> InsertAsync(
-        Product product, CancellationToken cancellationToken = default);
-
-    Task<Either<Error, Unit>> UpdateAsync(
-        Product product, CancellationToken cancellationToken = default);
+    Aff<RT, Product> of(Guid id);
+    Aff<RT, Seq<Product>> all(SelectParams @params);
+    Aff<RT, Unit> insert(Product product);
+    Aff<RT, Unit> update(Product product);
 }

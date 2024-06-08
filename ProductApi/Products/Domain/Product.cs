@@ -23,13 +23,18 @@ public class Product : AggregateRoot<Guid>
         };
     }
 
-    public void Adjust(int delta)
+    public void Adjust(int delta, TimeProvider time)
     {
         var previousQuantity = Quantity;
 
         Quantity += delta;
 
-        AddDomainEvent(new ProductAdjusted(Id, Title, Quantity, previousQuantity));
+        var domainEvent = new ProductAdjusted(Id, Title, Quantity, previousQuantity)
+        {
+            OccurredAt = time.GetLocalNow()
+        };
+
+        AddDomainEvent(domainEvent);
     }
 
     public static Product New(string title, decimal price, TimeProvider timeProvider)

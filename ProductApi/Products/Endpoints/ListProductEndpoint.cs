@@ -1,45 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LanguageExt.Effects.Traits;
 using ProductApi.Products.Domain;
+using System.Text.Json;
 
 namespace ProductApi.Products.Endpoints;
 
-public record ListProductEndpoint(
-    [FromQuery(Name = "p")] int? Page,
-    [FromQuery(Name = "s")] int? Size,
-    IProductRepo Repo,
-    IValidator<ListProductEndpoint> Validator,
-    CancellationToken CancelToken)
+public readonly struct ListProductEndpoint<RT>
+    where RT : struct, HasCancel<RT>, HasServiceProvider
 {
-    public Task<IResult> Handle()
-    {
-        var validationResult = Validator.Validate(this);
-        return EitherWithError(SelectParams.FromPaging(Page, Size))
-            .LeftWhen(_ => !validationResult.IsValid, () => Error.New("ValidationError"))
-            .BindAsync(@params => Repo.SelectAsync(@params, CancelToken))
-            .Match(Results.Ok, e =>
-            {
-                if (e.Message.Contains("ValidationError"))
-                {
-                    return Results.ValidationProblem(validationResult.ToDictionary());
-                }
-                return Results.BadRequest(e.Message);
-            });
-    }
+    public const string Name = "ListProduct";
 
-    public class EndpointValidator : AbstractValidator<ListProductEndpoint>
-    {
-        public EndpointValidator()
+    public static Aff<RT, IResult> New(PageParams pageParams) =>
+        from rt in runtime<RT>()
+        from log in rt.RequiredService<ILogger<ListProductEndpoint<RT>>>()
+        from _log1 in tap(() =>
         {
-            RuleFor(x => x.Page)
-                .GreaterThan(0)
-                .LessThanOrEqualTo(2_000_000)
-                .OverridePropertyName("p");
-
-            RuleFor(x => x.Size)
-                .GreaterThanOrEqualTo(0)
-                .LessThanOrEqualTo(1000)
-                .OverridePropertyName("s");
-        }
-    }
+            if (log.IsEnabled(LogLevel.Debug))
+            {
+                log.LogDebug("List product query params: {params}", JsonSerializer.Serialize(pageParams));
+            }
+        })
+        from repo in rt.RequiredService<IProductRepo<RT>>()
+        from validator in rt.RequiredService<IValidator<PageParams>>()
+        from validationResult in SuccessEff(validator.Validate(pageParams))
+        from __0 in guard(validationResult.IsValid, () => AppErrors.ValidationError(validationResult.ToDictionary()))
+        from res in repo.all(SelectParams.FromPaging(pageParams))
+        select Results.Ok(res);
 }
-
