@@ -1,119 +1,175 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LanguageExt.Effects.Traits;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
+using NSubstitute.ReceivedExtensions;
 using ProductApi.Products.Domain;
 using ProductApi.Products.Endpoints;
 using ProductApi.Tests.Products.TestData;
 
 namespace ProductApi.Tests.Products.Endpoints;
-
-using TestData = IEnumerable<object[]>;
-
 public class ListProductEndpointTests
 {
-    private static Product NewProduct() => Product.New(
-        Fake.Commerce.ProductName(), Fake.Random.Decimal(0.1m, 1_000), TimeProvider.System);
+    private readonly HasCancel<TestRuntime> _hasCancel;
+    private readonly HasServiceProvider _hasServiceProvider;
+    private readonly TestRuntime _runtime;
+    private readonly PageParams _pageParamsFake = new(default, default);
 
-    [Theory]
-    [InlineData(1, null)]
-    [InlineData(null, 20)]
-    [InlineData(null, null)]
-    public async Task ShouldReturnsProducts_WhenPageOrSizeNull(int? page, int? size)
+    public ListProductEndpointTests()
     {
-        // Arrange
-        var repo = Substitute.For<IProductRepo>();
-
-        var products = Repeat(10, NewProduct);
-
-        repo.SelectAsync(Arg.Any<SelectParams>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(EitherWithError(products)));
-
-        var validator = new ListProductEndpoint.EndpointValidator();
-
-        var ep = new ListProductEndpoint(page, size, repo, validator, CancellationToken.None);
-
-        // Act
-
-        var result = await ep.Handle();
-
-        // Assert
-
-        Assert.NotNull(result);
-        Assert.IsType<Ok<IEnumerable<Product>>>(result);
-
-        var okResult = (Ok<IEnumerable<Product>>)result!;
-
-        Assert.Equal(products, okResult.Value);
+        _hasCancel = Substitute.For<HasCancel<TestRuntime>>();
+        _hasServiceProvider = Substitute.For<HasServiceProvider>();
+        _runtime = TestRuntime.New(_hasCancel, _hasServiceProvider);
     }
 
-    public static TestData ShouldReturnValidationErrors_WhenPageOrSizeInvalid_TestData() =>
-        MakeTestData(5, () => Repeat(1, () => ListProductEndpointParams.Create(ListProductEndpointParams.InvalidTestData)));
-
     [Theory]
-    [MemberData(nameof(ShouldReturnValidationErrors_WhenPageOrSizeInvalid_TestData))]
-    public async Task ShouldReturnValidationErrors_WhenPageOrSizeInvalid(ListProductEndpointParams @params)
+    [InlineData(LogLevel.Debug, true)]
+    [InlineData(LogLevel.Information, false)]
+    [InlineData(LogLevel.Warning, false)]
+    [InlineData(LogLevel.Error, false)]
+    [InlineData(LogLevel.Critical, false)]
+    public async Task LogsAreWrittenCorrectly(LogLevel enabledLevel, bool shouldCall)
     {
         // Arrange
-        var validator = new ListProductEndpoint.EndpointValidator();
+        var logger = Substitute.For<ILogger<ListProductEndpoint<TestRuntime>>>();
 
-        var repo = Substitute.For<IProductRepo>();
+        logger.IsEnabled(Arg.Is(enabledLevel)).Returns(true);
 
-        var (page, size) = @params;
+        _hasServiceProvider
+            .RequiredService<ILogger<ListProductEndpoint<TestRuntime>>>()
+            .ReturnsEff(logger);
 
-        var ep = new ListProductEndpoint(page, size, repo, validator, CancellationToken.None);
+        var ep = ListProductEndpoint<TestRuntime>.New(_pageParamsFake);
 
         // Act
-
-        var result = await ep.Handle();
+        _ = await ep.Run(_runtime);
 
         // Assert
+        logger
+            .Received(Quantity.Exactly(1))
+            .IsEnabled(Arg.Is(LogLevel.Debug));
 
-        Assert.NotNull(result);
-        Assert.IsType<ProblemHttpResult>(result);
-
-        var problem = (ProblemHttpResult)result!;
-
-        Assert.IsType<HttpValidationProblemDetails>(problem.ProblemDetails);
-
-        var validationProblem = (HttpValidationProblemDetails)problem.ProblemDetails;
-        var keys = validationProblem.Errors;
-
-        if (page < 0)
-        {
-            Assert.Contains("p", keys);
-        }
-        if (size < 0)
-        {
-            Assert.Contains("s", keys);
-        }
+        logger
+            .Received(shouldCall ? Quantity.Exactly(1) : Quantity.None())
+            .Log(
+                logLevel: Arg.Is(LogLevel.Debug),
+                eventId: Arg.Any<EventId>(),
+                state: Arg.Any<Arg.AnyType>(),
+                exception: Arg.Is(default(Exception?)),
+                formatter: Arg.Any<Func<Arg.AnyType, Exception?, string>>()
+            );
     }
 
     [Fact]
-    public async Task ShouldReturnBadRequest_WhenQueryHasException()
+    public async Task TheValidatorIsCalled()
     {
-        var validator = new ListProductEndpoint.EndpointValidator();
+        // Arrange
+        var validator = Substitute.For<IValidator<PageParams>>();
 
-        var repo = Substitute.For<IProductRepo>();
+        _hasServiceProvider
+            .RequiredService<ILogger<ListProductEndpoint<TestRuntime>>>()
+            .ReturnsEff(NullLogger<ListProductEndpoint<TestRuntime>>.Instance);
 
-        var exception = new HttpRequestException("This is a fake exception");
-        var error = Error.New(exception);
+        _hasServiceProvider
+            .RequiredService<IValidator<PageParams>>()
+            .ReturnsEff(validator);
 
-        repo.SelectAsync(Arg.Any<SelectParams>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult(Either<Error, IEnumerable<Product>>.Left(error)));
-
-        var ep = new ListProductEndpoint(null, null, repo, validator, CancellationToken.None);
+        var ep = ListProductEndpoint<TestRuntime>.New(_pageParamsFake);
 
         // Act
-
-        var result = await ep.Handle();
+        _ = await ep.Run(_runtime);
 
         // Assert
+        validator.Received(Quantity.Exactly(1)).Validate(Arg.Is(_pageParamsFake));
+    }
 
-        Assert.NotNull(result);
-        Assert.IsType<BadRequest<string>>(result);
+    [Fact]
+    public async Task TheValidationErrorAreThrown()
+    {
+        // Arrange
+        _hasServiceProvider
+            .RequiredService<ILogger<ListProductEndpoint<TestRuntime>>>()
+            .ReturnsEff(NullLogger<ListProductEndpoint<TestRuntime>>.Instance);
 
-        var badRequest = (BadRequest<string>)result!;
+        var validator = Substitute.For<IValidator<PageParams>>();
 
-        Assert.NotNull(badRequest);
+        validator.Validate(Arg.Is(_pageParamsFake))
+            .Returns(new FluentValidation.Results.ValidationResult()
+            {
+                Errors = [new() { PropertyName = "Page", ErrorMessage = "Invalid" }]
+            });
+
+        _hasServiceProvider
+            .RequiredService<IValidator<PageParams>>()
+            .ReturnsEff(validator);
+
+        var ep = ListProductEndpoint<TestRuntime>.New(_pageParamsFake);
+
+        Error? error = null;
+
+        // Act
+        var app = await ep.Catch(err =>
+        {
+            error = err;
+            return FailEff<IResult>(err);
+        }).Run(_runtime);
+
+        // Assert
+        Assert.True(app.IsFail);
+        Assert.NotNull(error);
+        Assert.IsType<ValidationError>(error);
+
+        _hasServiceProvider
+            .Received(Quantity.None())
+            .RequiredService<IProductRepo<TestRuntime>>();
+    }
+
+    [Fact]
+    public async Task WhenRepoReturnsData_ThenProducesOk()
+    {
+        // Arrange
+        _hasServiceProvider
+            .RequiredService<ILogger<ListProductEndpoint<TestRuntime>>>()
+            .ReturnsEff(NullLogger<ListProductEndpoint<TestRuntime>>.Instance);
+
+        var validator = Substitute.For<IValidator<PageParams>>();
+        validator.Validate(Arg.Any<PageParams>())
+            .Returns(new FluentValidation.Results.ValidationResult());
+
+        _hasServiceProvider
+            .RequiredService<IValidator<PageParams>>()
+            .ReturnsEff(validator);
+
+        var repo = Substitute.For<IProductRepo<TestRuntime>>();
+
+        var productTitle = Guid.NewGuid().ToString();
+        var products = Seq([Product.New(productTitle, 3200, TimeProvider.System)]);
+
+        repo.all(Arg.Any<SelectParams>())
+            .ReturnsAff(products);
+
+        _hasServiceProvider
+            .RequiredService<IProductRepo<TestRuntime>>()
+            .ReturnsEff(repo);
+
+        var ep = ListProductEndpoint<TestRuntime>.New(_pageParamsFake);
+
+        // Act
+        var app = await ep.Run(_runtime);
+
+        // Assert
+        Assert.True(app.IsSucc);
+
+        app.IfSucc((result) =>
+        {
+            Assert.IsType<Ok<Seq<Product>>>(result);
+
+            var seq = ((Ok<Seq<Product>>)result).Value;
+
+            Assert.Equal(1, seq.Count);
+            Assert.Equal(productTitle, seq[0].Title);
+        });
     }
 }

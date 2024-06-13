@@ -2,14 +2,50 @@
 
 namespace ProductApi.Products.Domain;
 
-public class Product : AggregateRoot<Guid>
+public record Product
 {
-    private Product() { }
+    public required Guid Id { get; init; }
+    public required string Title { get; init; } = string.Empty;
+    public required decimal Price { get; init; }
+    public bool IsActive { get; init; } = false;
+    public int Quantity { get; init; } = 0;
 
-    public string Title { get; private set; } = string.Empty;
-    public decimal Price { get; private set; }
-    public bool IsActive { get; private set; } = false;
-    public int Quantity { get; private set; } = 0;
+    public Seq<IDomainEvent> DomainEvents { get; init; }
+
+    public static Product New(string title, decimal price, TimeProvider timeProvider)
+    {
+        var id = Guid.NewGuid();
+        return new Product()
+        {
+            Id = Guid.NewGuid(),
+            Title = title,
+            Price = price,
+            DomainEvents =
+            [
+                new ProductCreated(id, title)
+                {
+                    OccurredAt = timeProvider.GetLocalNow(),
+                }
+            ]
+        };
+    }
+
+    public Product Adjust(int delta, TimeProvider time)
+    {
+        var previousQuantity = Quantity;
+        var newQuantity = Quantity + delta;
+
+        var domainEvent = new ProductAdjusted(Id, Title, Quantity, previousQuantity)
+        {
+            OccurredAt = time.GetLocalNow()
+        };
+
+        return this with
+        {
+            Quantity = newQuantity,
+            DomainEvents = [.. DomainEvents, domainEvent]
+        };
+    }
 
     public static Product FromJsonArray(JsonDocument[] row)
     {
@@ -21,36 +57,5 @@ public class Product : AggregateRoot<Guid>
             IsActive = row[3].Deserialize<bool>()!,
             Quantity = row[4].Deserialize<int>()!,
         };
-    }
-
-    public void Adjust(int delta, TimeProvider time)
-    {
-        var previousQuantity = Quantity;
-
-        Quantity += delta;
-
-        var domainEvent = new ProductAdjusted(Id, Title, Quantity, previousQuantity)
-        {
-            OccurredAt = time.GetLocalNow()
-        };
-
-        AddDomainEvent(domainEvent);
-    }
-
-    public static Product New(string title, decimal price, TimeProvider timeProvider)
-    {
-        var entity = new Product()
-        {
-            Id = Guid.NewGuid(),
-            Title = title,
-            Price = price,
-        };
-
-        entity.AddDomainEvent(new ProductCreated(entity.Id, entity.Title)
-        {
-            OccurredAt = timeProvider.GetLocalNow(),
-        });
-
-        return entity;
     }
 }

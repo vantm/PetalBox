@@ -44,7 +44,6 @@ public static class EitherExtensions
             return r;
         });
 
-
     public static Task<T> Tap<T>(this Task<T> monad, Action<T> action) where T : IEither
         => monad.Map((r) =>
         {

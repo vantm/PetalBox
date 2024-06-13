@@ -54,7 +54,7 @@ public class DaprProductRepo<RT> : IProductRepo<RT>
         from _1 in guardnot(res.GetAffectedRows() == 0, AppErrors.DbError("Insert.Failed"))
         from bus in rt.RequiredService<IServiceBus>()
         from pubRes in retry(Schedule.TimeSeries(Constants.Retries),
-            from pubRes in bus.PublishEventsAsync(product).ToAff()
+            from pubRes in bus.PublishEventsAsync(product.DomainEvents).ToAff()
             from _0 in flattenEff(pubRes)
             select pubRes
         )
@@ -71,7 +71,7 @@ public class DaprProductRepo<RT> : IProductRepo<RT>
         from _1 in guardnot(res.GetAffectedRows() == 0, AppErrors.DbError("Update.Failed"))
         from bus in rt.RequiredService<IServiceBus>()
         from pubRes in retry(Schedule.TimeSeries(Constants.Retries),
-            from pubRes in bus.PublishEventsAsync(product).ToAff()
+            from pubRes in bus.PublishEventsAsync(product.DomainEvents).ToAff()
             from _0 in flattenEff(pubRes)
             select pubRes
         )

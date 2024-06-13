@@ -16,13 +16,15 @@ public readonly struct ListProductEndpoint<RT>
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.LogDebug("List product query params: {params}", JsonSerializer.Serialize(pageParams));
+                log.LogDebug(
+                    "Query Params: {Params}",
+                    JsonSerializer.Serialize(pageParams));
             }
         })
-        from repo in rt.RequiredService<IProductRepo<RT>>()
         from validator in rt.RequiredService<IValidator<PageParams>>()
         from validationResult in SuccessEff(validator.Validate(pageParams))
         from __0 in guard(validationResult.IsValid, () => AppErrors.ValidationError(validationResult.ToDictionary()))
+        from repo in rt.RequiredService<IProductRepo<RT>>()
         from res in repo.all(SelectParams.FromPaging(pageParams))
         select Results.Ok(res);
 }
