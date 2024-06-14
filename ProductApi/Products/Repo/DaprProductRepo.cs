@@ -44,7 +44,7 @@ public class DaprProductRepo<RT> : IProductRepo<RT>
         from ret in flattenEff(parsed)
         select ret;
 
-    public Aff<RT, Unit> insert(Product product) =>
+    public Aff<RT, Product> insert(Product product) =>
         from rt in runtime<RT>()
         from _0 in guard(notnull(product), Error.New(new ArgumentNullException(nameof(product))))
         from helper in rt.RequiredService<DaprProductRepoHelper>()
@@ -59,9 +59,9 @@ public class DaprProductRepo<RT> : IProductRepo<RT>
             select pubRes
         )
         from _2 in flattenEff(pubRes)
-        select unit;
+        select product with { DomainEvents = [] };
 
-    public Aff<RT, Unit> update(Product product) =>
+    public Aff<RT, Product> update(Product product) =>
         from rt in runtime<RT>()
         from _0 in guard(notnull(product), Error.New(new ArgumentNullException(nameof(product))))
         from helper in rt.RequiredService<DaprProductRepoHelper>()
@@ -76,5 +76,5 @@ public class DaprProductRepo<RT> : IProductRepo<RT>
             select pubRes
         )
         from _2 in flattenEff(pubRes)
-        select unit;
+        select product with { DomainEvents = [] };
 }

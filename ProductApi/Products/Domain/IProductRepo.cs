@@ -7,6 +7,6 @@ public interface IProductRepo<RT>
 {
     Aff<RT, Product> of(Guid id);
     Aff<RT, Seq<Product>> all(SelectParams @params);
-    Aff<RT, Unit> insert(Product product);
-    Aff<RT, Unit> update(Product product);
+    Aff<RT, Product> insert(Product product);
+    Aff<RT, Product> update(Product product);
 }
