@@ -9,7 +9,6 @@ using ProductApi.Products;
 using ProductApi.Products.Domain;
 using ProductApi.Products.Endpoints.ListProduct;
 using ProductApi.Products.Models;
-using Riok.Mapperly.Abstractions;
 
 namespace ProductApi.Tests.Products.Endpoints;
 public class ListProductEndpointTests
