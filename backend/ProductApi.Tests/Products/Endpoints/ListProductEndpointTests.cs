@@ -5,8 +5,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using NSubstitute.ReceivedExtensions;
+using ProductApi.Products;
 using ProductApi.Products.Domain;
-using ProductApi.Products.Endpoints;
+using ProductApi.Products.Endpoints.ListProduct;
+using ProductApi.Products.Models;
+using Riok.Mapperly.Abstractions;
 
 namespace ProductApi.Tests.Products.Endpoints;
 public class ListProductEndpointTests
@@ -29,7 +32,7 @@ public class ListProductEndpointTests
     [InlineData(LogLevel.Warning, false)]
     [InlineData(LogLevel.Error, false)]
     [InlineData(LogLevel.Critical, false)]
-    public async Task LogsAreWrittenCorrectly(LogLevel enabledLevel, bool shouldCall)
+    public async Task LogsAreWrittenCorrectly(LogLevel enabledLevel, bool shouldLog)
     {
         // Arrange
         var logger = Substitute.For<ILogger<ListProductEndpoint<TestRuntime>>>();
@@ -51,7 +54,7 @@ public class ListProductEndpointTests
             .IsEnabled(Arg.Is(LogLevel.Debug));
 
         logger
-            .Received(shouldCall ? Quantity.Exactly(1) : Quantity.None())
+            .Received(shouldLog ? Quantity.Exactly(1) : Quantity.None())
             .Log(
                 logLevel: Arg.Is(LogLevel.Debug),
                 eventId: Arg.Any<EventId>(),
@@ -144,7 +147,9 @@ public class ListProductEndpointTests
         var repo = Substitute.For<IProductRepo<TestRuntime>>();
 
         ProductTitle productTitle = new(Guid.NewGuid().ToString());
-        var products = Seq([Product.New(productTitle, new(3200), TimeProvider.System)]);
+        ProductPrice productPrice = new(100);
+
+        var products = Seq([Product.New(productTitle, productPrice, TimeProvider.System)]);
 
         repo.all(Arg.Any<SelectParams>())
             .ReturnsAff(products);
@@ -152,6 +157,10 @@ public class ListProductEndpointTests
         _hasServiceProvider
             .RequiredService<IProductRepo<TestRuntime>>()
             .ReturnsEff(repo);
+
+        _hasServiceProvider
+            .RequiredService<ProductMapper>()
+            .ReturnsEff(new());
 
         var ep = ListProductEndpoint<TestRuntime>.New(_pageParamsFake);
 
@@ -163,12 +172,14 @@ public class ListProductEndpointTests
 
         app.IfSucc((result) =>
         {
-            Assert.IsType<Ok<Seq<Product>>>(result);
+            Assert.IsType<Ok<Seq<ProductDto>>>(result);
 
-            var seq = ((Ok<Seq<Product>>)result).Value;
+            var seq = ((Ok<Seq<ProductDto>>)result).Value;
 
             Assert.Equal(1, seq.Count);
-            Assert.Equal(productTitle, seq[0].Title);
+            Assert.Equal(productTitle.Value, seq[0].Title);
+            Assert.Equal(productPrice.Value, seq[0].Price);
+            Assert.Equal(products[0].Id.Value, seq[0].Id);
         });
     }
 }

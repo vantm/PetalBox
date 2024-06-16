@@ -1,7 +1,7 @@
 ﻿using ProductApi.Products.Domain;
 using System.Diagnostics;
 
-namespace ProductApi.Products.Endpoints;
+namespace ProductApi.Products.Endpoints.GetProduct;
 
 public readonly struct GetProductEndpoint<RT>
     where RT : struct, HasCancel<RT>, HasServiceProvider

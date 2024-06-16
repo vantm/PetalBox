@@ -5,15 +5,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddServicesRegistrations(builder.Configuration, builder.Environment);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(t =>
+        t.FullName!
+         .Replace("MessageApi", string.Empty)
+         .Replace(".", string.Empty));
+});
 
 builder.Services.AddHealthChecks();
 
 builder.Services.AddCarter();
-
-builder.Services.AddSingleton(TimeProvider.System);
-
-builder.Services.AddDaprClient();
 
 var app = builder.Build();
 

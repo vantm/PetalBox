@@ -1,7 +1,7 @@
 ﻿using ProductApi.Products.Domain;
 using System.Text.Json;
 
-namespace ProductApi.Products.Endpoints;
+namespace ProductApi.Products.Endpoints.ListProduct;
 
 public readonly struct ListProductEndpoint<RT>
     where RT : struct, HasCancel<RT>, HasServiceProvider

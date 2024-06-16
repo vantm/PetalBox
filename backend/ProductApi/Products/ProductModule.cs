@@ -1,6 +1,9 @@
 ﻿using Carter;
 using Microsoft.AspNetCore.Mvc;
-using ProductApi.Products.Endpoints;
+using ProductApi.Products.Endpoints.AdjustProduct;
+using ProductApi.Products.Endpoints.CreateProduct;
+using ProductApi.Products.Endpoints.GetProduct;
+using ProductApi.Products.Endpoints.ListProduct;
 
 namespace ProductApi.Products;
 
@@ -34,7 +37,7 @@ public class ProductModule : CarterModule
 
         app.MapPost(
                 "{id:guid}/quantity",
-                (Guid id, AdjustProductRequest body, WebRuntime rt) =>
+                (Guid id, AdjustProductBody body, WebRuntime rt) =>
                     rt.RunAff(AdjustProductEndpoint<Runtime>.New(id, body))
             );
     }

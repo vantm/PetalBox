@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageApi", "MessageApi\Me
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common", "Common\Common.shproj", "{3674A744-6491-40CC-BF70-5400363746AA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CF0B6E2D-75D0-4A18-AF4F-E1703E61B8ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{19D77664-79F4-4E8B-9C49-0C6A96B71F19} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
+		{957EC09D-7D0F-40B3-8D57-FA5860CE921F} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
+		{52F8CAF6-A831-4F7C-B3B5-6031094BD5B8} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
+		{95EF1F89-D84F-46B0-BE03-4BDBA98A6605} = {CF0B6E2D-75D0-4A18-AF4F-E1703E61B8ED}
+		{627D528D-993E-4145-9D72-6C402E5FB61A} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AE4A78E-D76B-4B8E-AD3C-D835375833D7}

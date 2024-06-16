@@ -3,11 +3,17 @@ using Carter;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddHealthChecks();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(t =>
+        t.FullName!
+         .Replace("ProductApi", string.Empty)
+         .Replace(".", string.Empty));
+});
 
 builder.Services.AddCarter();
+
+builder.Services.AddHealthChecks();
 
 builder.Services.AddServicesRegistrations(builder.Configuration, builder.Environment);
 

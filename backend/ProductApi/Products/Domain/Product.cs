@@ -12,7 +12,6 @@ public record Product
     public ProductQuantity Quantity { get; init; } = new(0);
     public bool IsActive { get; init; } = false;
 
-    [JsonIgnore]
     [MapperIgnore]
     public Seq<IDomainEvent> DomainEvents { get; init; }
 
