@@ -9,6 +9,6 @@ public class ProductServicesRegistration : IServicesRegistration
     {
         services.AddSingleton(typeof(IProductRepo<>), typeof(DaprProductRepo<>));
         services.AddSingleton<DaprProductRepoHelper>();
-        services.AddSingleton<Mapper>();
+        services.AddSingleton<ProductMapper>();
     }
 }

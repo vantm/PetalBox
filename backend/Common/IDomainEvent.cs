@@ -2,6 +2,6 @@
 
 public interface IDomainEvent
 {
-    Guid Id { get; }
+    Guid MessageId { get; }
     DateTimeOffset OccurredAt { get; }
 }

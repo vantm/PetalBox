@@ -3,7 +3,10 @@ using PublicApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("yarp.json");
+builder.Configuration.AddJsonFile(
+    "yarp.json",
+    optional: false,
+    reloadOnChange: builder.Environment.IsDevelopment());
 
 builder.Services
     .AddReverseProxy()

@@ -15,18 +15,11 @@
           "Methods": [ "GET" ]
         }
       },
-      "product-api-create-adjustment": {
-        "ClusterId": "productApi",
+      "order-api-get-or-update-basket": {
+        "ClusterId": "orderApi",
         "Match": {
-          "Path": "/adjustments",
-          "Methods": [ "POST" ]
-        }
-      },
-      "product-api-find-adjustment": {
-        "ClusterId": "productApi",
-        "Match": {
-          "Path": "/adjustments/{id}",
-          "Methods": [ "GET" ]
+          "Path": "/basket",
+          "Methods": [ "GET", "POST" ]
         }
       }
     },
@@ -35,7 +28,7 @@
         "MetaData": { "DaprAppId": "product-api" }
       },
       "orderApi": {
-        "MetaData": { "DaprAppId": "product-api" }
+        "MetaData": { "DaprAppId": "order-api" }
       },
       "messageApi": {
         "MetaData": { "DaprAppId": "message-api" }

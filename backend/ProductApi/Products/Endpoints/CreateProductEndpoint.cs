@@ -30,7 +30,7 @@ public readonly struct CreateProductEndpoint<RT>
         from newProduct in SuccessEff(Product.New(new(body.Title), new(body.Price), time))
         from repo in rt.RequiredService<IProductRepo<RT>>()
         from product in repo.insert(newProduct)
-        from mapper in rt.RequiredService<Mapper>()
+        from mapper in rt.RequiredService<ProductMapper>()
         from dto in mapper.MapToProductDtoEff(product)
         select Results.CreatedAtRoute("GetProduct", new { dto.Id }, dto);
 }

@@ -5,7 +5,7 @@ using Riok.Mapperly.Abstractions;
 namespace ProductApi.Products;
 
 [Mapper]
-public partial class Mapper
+public partial class ProductMapper
 {
     public virtual partial ProductDto MapToProductDto(Product product);
 

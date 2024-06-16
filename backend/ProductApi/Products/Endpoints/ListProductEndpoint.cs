@@ -23,7 +23,7 @@ public readonly struct ListProductEndpoint<RT>
         from __0 in guard(validationResult.IsValid, () => AppErrors.ValidationError(validationResult.ToDictionary()))
         from repo in rt.RequiredService<IProductRepo<RT>>()
         from products in repo.all(SelectParams.FromPaging(pageParams))
-        from mapper in rt.RequiredService<Mapper>()
+        from mapper in rt.RequiredService<ProductMapper>()
         from dtos in mapper.MapToProductDtoEff(products)
         select Results.Ok(dtos);
 }

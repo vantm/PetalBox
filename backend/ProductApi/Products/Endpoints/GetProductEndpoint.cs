@@ -16,7 +16,7 @@ public readonly struct GetProductEndpoint<RT>
         from product in repo.of(new(id))
         from __1 in tap(() => sw.Stop())
         from __2 in tap(() => logger.LogInformation("Finding product {id} has completed in {time} ms", id, sw.ElapsedMilliseconds))
-        from mapper in rt.RequiredService<Mapper>()
+        from mapper in rt.RequiredService<ProductMapper>()
         from dto in mapper.MapToProductDtoEff(product)
         select Results.Ok(dto);
 }
