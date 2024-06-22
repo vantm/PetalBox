@@ -2,6 +2,6 @@
 
 public class DaprBasketHelper
 {
-    public string BasketStateStoreKey(Guid userId) =>
+    public string BasketStateStoreKey(UserId userId) =>
         $"basket-module.user.{userId}.basket";
 }

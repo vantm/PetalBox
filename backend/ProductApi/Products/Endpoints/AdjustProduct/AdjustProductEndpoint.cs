@@ -13,7 +13,7 @@ public readonly struct AdjustProductEndpoint<RT>
         from validationResult in SuccessEff(validator.Validate(body))
         from __2 in guard(validationResult.IsValid, AppErrors.ValidationError(validationResult.ToDictionary()))
         from repo in rt.RequiredService<IProductRepo<RT>>()
-        from product in repo.of(new(id))
+        from product in repo.of(ProductId.FromValue(id))
         from time in rt.RequiredService<TimeProvider>()
         from adjustedProduct in SuccessEff(product.Adjust(new(body.Delta), time))
         from __4 in repo.update(adjustedProduct)

@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{7C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{E226F565-4923-4317-B34E-20C70E479D31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApi", "CustomerApi\CustomerApi.csproj", "{FD11D65E-3CD9-481C-A3FE-45C7EFF10D75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentApi", "PaymentApi\PaymentApi.csproj", "{31429207-95C9-4D66-864A-8EF01B73B74E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{E226F565-4923-4317-B34E-20C70E479D31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E226F565-4923-4317-B34E-20C70E479D31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E226F565-4923-4317-B34E-20C70E479D31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD11D65E-3CD9-481C-A3FE-45C7EFF10D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD11D65E-3CD9-481C-A3FE-45C7EFF10D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD11D65E-3CD9-481C-A3FE-45C7EFF10D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD11D65E-3CD9-481C-A3FE-45C7EFF10D75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31429207-95C9-4D66-864A-8EF01B73B74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31429207-95C9-4D66-864A-8EF01B73B74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31429207-95C9-4D66-864A-8EF01B73B74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31429207-95C9-4D66-864A-8EF01B73B74E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,14 +74,18 @@ Global
 		{95EF1F89-D84F-46B0-BE03-4BDBA98A6605} = {CF0B6E2D-75D0-4A18-AF4F-E1703E61B8ED}
 		{627D528D-993E-4145-9D72-6C402E5FB61A} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
 		{E226F565-4923-4317-B34E-20C70E479D31} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
+		{FD11D65E-3CD9-481C-A3FE-45C7EFF10D75} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
+		{31429207-95C9-4D66-864A-8EF01B73B74E} = {7CE25130-E2E3-4539-B6CA-86BF84FB3BE2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2AE4A78E-D76B-4B8E-AD3C-D835375833D7}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{19d77664-79f4-4e8b-9c49-0c6a96b71f19}*SharedItemsImports = 5
+		Common\Common.projitems*{31429207-95c9-4d66-864a-8ef01b73b74e}*SharedItemsImports = 5
 		Common\Common.projitems*{3674a744-6491-40cc-bf70-5400363746aa}*SharedItemsImports = 13
 		Common\Common.projitems*{627d528d-993e-4145-9d72-6c402e5fb61a}*SharedItemsImports = 5
 		Common\Common.projitems*{957ec09d-7d0f-40b3-8d57-fa5860ce921f}*SharedItemsImports = 5
+		Common\Common.projitems*{fd11d65e-3cd9-481c-a3fe-45c7eff10d75}*SharedItemsImports = 5
 	EndGlobalSection
 EndGlobal

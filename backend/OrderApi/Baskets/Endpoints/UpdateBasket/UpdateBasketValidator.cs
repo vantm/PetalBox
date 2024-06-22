@@ -9,6 +9,6 @@ public class UpdateBasketValidator : AbstractValidator<UpdateBasketBody>
             .Must(NotTooManyItems).WithMessage("Too many items are allowed");
     }
 
-    public static bool NotTooManyItems(UpdateBasketItemBody[] items) =>
+    public static bool NotTooManyItems(UpdateBasketBodyItem[] items) =>
         items.Length <= 100;
 }

@@ -47,6 +47,34 @@ apps:
       - run
       - --no-hot-reload
       - --no-interactive
+  - appDirPath: ./CustomerApi
+    appID: customer-api
+    appPort: 8404
+    appHealthCheckPath: /hc
+    appLogDestination: console
+    daprdLogDestination: console
+    enableAppHealthCheck: true
+    enableProfiling: false
+    command:
+      - dotnet
+      - watch
+      - run
+      - --no-hot-reload
+      - --no-interactive
+  - appDirPath: ./PaymentApi
+    appID: payment-api
+    appPort: 8405
+    appHealthCheckPath: /hc
+    appLogDestination: console
+    daprdLogDestination: console
+    enableAppHealthCheck: true
+    enableProfiling: false
+    command:
+      - dotnet
+      - watch
+      - run
+      - --no-hot-reload
+      - --no-interactive
   - appDirPath: ./PublicApi
     appID: public-api
     appPort: 8499

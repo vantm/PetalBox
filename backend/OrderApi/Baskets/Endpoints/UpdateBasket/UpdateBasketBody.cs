@@ -1,3 +1,3 @@
 ﻿namespace OrderApi.Baskets.Endpoints.UpdateBasket;
 
-public record UpdateBasketBody(UpdateBasketItemBody[] Items);
+public record UpdateBasketBody(UpdateBasketBodyItem[] Items);

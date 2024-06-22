@@ -1,5 +1,4 @@
-﻿
-namespace OrderApi.Orders;
+﻿namespace OrderApi.Orders;
 
 public class OrderServicesRegistration : IServicesRegistration
 {

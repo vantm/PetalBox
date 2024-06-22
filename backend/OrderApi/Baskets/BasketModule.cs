@@ -1,5 +1,4 @@
-﻿
-using Carter;
+﻿using Carter;
 using OrderApi.Baskets.Endpoints.GetBaskset;
 using OrderApi.Baskets.Endpoints.UpdateBasket;
 

@@ -1,14 +1,17 @@
 {
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "pglocal",
-            "database": "petal-box",
-            "username": "postgres",
-            "password": "P@ssw0rd"
-        }
-    ]
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "pglocal",
+      "database": "petal-box",
+      "username": "postgres",
+      "password": "P@ssw0rd"
+    }
+  ],
+  "mssql.intelliSense.enableIntelliSense": false,
+  "pgsql.intelliSense.enableIntelliSense": true,
+  "sql-formatter.dialect": "pl/sql"
 }

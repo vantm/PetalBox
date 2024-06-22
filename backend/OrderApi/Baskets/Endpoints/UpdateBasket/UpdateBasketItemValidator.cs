@@ -1,6 +1,6 @@
 ﻿namespace OrderApi.Baskets.Endpoints.UpdateBasket;
 
-public class UpdateBasketItemValidator : AbstractValidator<UpdateBasketItemBody>
+public class UpdateBasketItemValidator : AbstractValidator<UpdateBasketBodyItem>
 {
     public UpdateBasketItemValidator()
     {

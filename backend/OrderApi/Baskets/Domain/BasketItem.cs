@@ -1,4 +1,4 @@
 ﻿namespace OrderApi.Baskets.Domain;
 
-public record BasketItem(Guid ProductId, int Quantity);
+public record BasketItem(ProductId ProductId, int Quantity);
 

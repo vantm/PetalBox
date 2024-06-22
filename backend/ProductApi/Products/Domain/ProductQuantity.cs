@@ -1,3 +1,3 @@
 ﻿namespace ProductApi.Products.Domain;
 
-public sealed class ProductQuantity(int value) : NewType<ProductQuantity, int>(value);
+public record ProductQuantity(int Value) : NewValueType<ProductQuantity, int>(Value);

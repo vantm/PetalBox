@@ -32,6 +32,12 @@
       },
       "messageApi": {
         "MetaData": { "DaprAppId": "message-api" }
+      },
+      "customerApi": {
+        "MetaData": { "DaprAppId": "customer-api" }
+      },
+      "paymentApi": {
+        "MetaData": { "DaprAppId": "payment-api" }
       }
     }
   }

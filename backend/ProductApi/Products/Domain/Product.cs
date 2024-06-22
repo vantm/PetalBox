@@ -1,6 +1,5 @@
 ﻿using Riok.Mapperly.Abstractions;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace ProductApi.Products.Domain;
 
@@ -23,7 +22,7 @@ public record Product
         var id = Guid.NewGuid();
         return new Product()
         {
-            Id = new(Guid.NewGuid()),
+            Id = ProductId.NewId(),
             Title = title,
             Price = price,
             DomainEvents =
@@ -39,7 +38,10 @@ public record Product
     public Product Adjust(ProductQuantity delta, TimeProvider time)
     {
         var previousQuantity = Quantity;
-        var newQuantity = Quantity.Map(x => x + delta.Value);
+        var newQuantity = delta with
+        {
+            Value = Quantity.Value + delta.Value
+        };
 
         var domainEvent = new ProductAdjusted(
             Id.Value, Title.Value, Quantity.Value, previousQuantity.Value)
@@ -58,7 +60,7 @@ public record Product
     {
         return new()
         {
-            Id = new(Guid.Parse(row[0].Deserialize<string>()!)),
+            Id = ProductId.FromValue(Guid.Parse(row[0].Deserialize<string>()!)),
             Title = new(row[1].Deserialize<string>()!),
             Price = new(row[2].Deserialize<decimal>()!),
             Quantity = new(row[4].Deserialize<int>()!),

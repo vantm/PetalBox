@@ -14,6 +14,16 @@ builder.Services
     .AddConfigFilter<DaprConfigFilter>()
     .AddTransforms<DaprTransformProvider>();
 
+builder.Services
+    .AddAuthentication()
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://localhost:8500";
+        options.TokenValidationParameters.ValidateAudience = false;
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddHealthChecks();
 
 builder.Services.Configure<ForwardedHeadersOptions>(o =>
@@ -28,6 +38,9 @@ var app = builder.Build();
 app.MapHealthChecks("/hc");
 
 app.UseForwardedHeaders();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapReverseProxy();
 

@@ -12,7 +12,7 @@ public class DaprBasketService(
     TimeProvider timeProvider) : IBasketService
 {
     private readonly string _stateStoreName = Options.Value.StateStoreName;
-    public Task<Basket?> GetAsync(Guid userId, CancellationToken cancellationToken = default)
+    public Task<Basket?> GetAsync(UserId userId, CancellationToken cancellationToken = default)
     {
         var stateStoreKey = helper.BasketStateStoreKey(userId);
         return dapr.GetStateAsync<Basket?>(
