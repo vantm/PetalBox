@@ -1,4 +1,6 @@
-﻿namespace OrderApi.Baskets.Domain;
+﻿using Common.Domain.ValueObjects;
+
+namespace OrderApi.Baskets.Domain;
 
 public record Basket(BasketId Id, UserId UserId, IEnumerable<BasketItem> Items)
 {

@@ -1,4 +1,5 @@
-﻿using OrderApi.Baskets.Domain;
+﻿using Common.Domain.ValueObjects;
+using OrderApi.Baskets.Domain;
 
 namespace OrderApi.Baskets.Services;
 

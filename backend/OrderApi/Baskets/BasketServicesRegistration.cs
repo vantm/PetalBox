@@ -1,5 +1,5 @@
 ﻿using OrderApi.Baskets.Services;
-using OrderApi.Baskets.Services.Implementation;
+using OrderApi.Baskets.Services.Internals;
 
 namespace OrderApi.Baskets;
 

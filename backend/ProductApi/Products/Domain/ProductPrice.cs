@@ -1,3 +1,8 @@
-﻿namespace ProductApi.Products.Domain;
+﻿using Common.Domain.ValueObjects;
 
-public record ProductPrice(decimal Value) : NewValueType<ProductPrice, decimal>(Value);
+namespace ProductApi.Products.Domain;
+
+public record ProductPrice(decimal Value) : NewValueType<ProductPrice, decimal>(Value)
+{
+    public static readonly ProductPrice Zero = new(0);
+}

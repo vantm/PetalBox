@@ -1,3 +1,8 @@
-﻿namespace ProductApi.Products.Domain;
+﻿using Common.Domain.ValueObjects;
 
-public record ProductQuantity(int Value) : NewValueType<ProductQuantity, int>(Value);
+namespace ProductApi.Products.Domain;
+
+public record ProductQuantity(int Value) : NewValueType<ProductQuantity, int>(Value)
+{
+    public static readonly ProductQuantity Zero = new(0);
+}

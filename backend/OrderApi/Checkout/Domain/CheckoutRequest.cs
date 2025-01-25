@@ -1,6 +1,6 @@
-﻿namespace OrderApi.Checkout.Domain;
+﻿using Common.Domain.ValueObjects;
 
-public record CheckoutId(Guid Value) : NewValueType<CheckoutId, Guid>(Value);
+namespace OrderApi.Checkout.Domain;
 
 public record CheckoutRequest(
     CheckoutId Id,

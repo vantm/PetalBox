@@ -1,8 +1,8 @@
-﻿namespace OrderApi.Orders.Domain;
+﻿using Common.Domain;
+using Common.Domain.ValueObjects;
 
-public interface ISaleOrderRepo
+namespace OrderApi.Orders.Domain;
+
+public interface ISaleOrderRepo<RT> : IRepo<SaleOrder, SaleOrderId, RT> where RT : IAppRuntime
 {
-    Task<Either<Error, Option<SaleOrder>>> FindAsync(SaleOrderId id);
-    Task<Either<Error, Unit>> InsertAsync(SaleOrder order);
-    Task<Either<Error, Unit>> UpdateAsync(SaleOrder order);
 }

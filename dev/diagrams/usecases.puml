@@ -1,0 +1,45 @@
+@startuml Front Office Use Cases
+
+left to right direction
+
+(View products) as UC1_1
+
+(Add to basket) as UC1_2
+
+(Order) as UC1_3
+
+(Change Delivery Address) as UC1_4
+
+(Login) as UC1_5
+
+:Customer: as u
+
+u -- UC1_1
+u -- UC1_2
+u -- UC1_3
+u -- UC1_5
+
+UC1_3 ..> UC1_4 : include
+
+@enduml
+
+@startuml Back Office Use Cases
+
+left to right direction
+
+:Manager: as m
+
+(Manage products) as UC2_1
+
+(Manage orders) as UC2_2
+
+(Manage customers) as UC2_3
+
+(Login) as UC2_4
+
+m -- UC2_1
+m -- UC2_2
+m -- UC2_3
+m -- UC2_4
+
+@enduml

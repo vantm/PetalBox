@@ -1,4 +1,6 @@
-﻿using Riok.Mapperly.Abstractions;
+﻿using CustomerApi.Customers.Domain;
+using CustomerApi.Customers.Models;
+using Riok.Mapperly.Abstractions;
 
 namespace CustomerApi.Customers;
 

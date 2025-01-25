@@ -9,33 +9,40 @@
     <Import_RootNamespace>Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)AggregateRoot.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CommonOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)domain\IRepo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\SaleOrderId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\SaleOrderLineId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Functional\AppErrors.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ServiceBusExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PageParamsValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\AddressId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\AggregateRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Options\CommonOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonServicesRegistration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DaprPubsubMessage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GuidId.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NewValueType.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PageParams.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ProductId.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)UserId.cs" />
-    <Compile Include="..\Common\PageParamsValidator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ValidationError.cs" />
-    <Compile Include="..\Common\AppErrors.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ErrorHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HasServiceProvider.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)WebRuntime.cs" />
-    <Compile Include="..\Common\Runtime.cs" />
-    <Compile Include="..\Common\ServiceBusExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DaprExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DomainEvent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EitherExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GlobalUsings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IAggregateRoot.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IDomainEvent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Implements\DaprServiceBus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IServiceBus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\CustomerId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dapr\DaprPubsubMessage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\Entity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\GuidId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Functional\IAppRuntime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Functional\AppRuntime.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\NewValueType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PageParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\ProductId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\ValueObjects\UserId.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Functional\ValidationError.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Functional\ErrorHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dapr\DaprExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\DomainEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\IAggregateRoot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\IDomainEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dapr\Internals\DaprServiceBus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Domain\IServiceBus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IServicesRegistration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)SelectParams.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SelectParams.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServiceCollectionExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Dapr\Internals\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Options\" />
   </ItemGroup>
 </Project>

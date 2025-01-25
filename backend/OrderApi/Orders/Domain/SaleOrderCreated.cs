@@ -1,3 +1,6 @@
-﻿namespace OrderApi.Orders.Domain;
+﻿using Common.Domain;
+using Common.Domain.ValueObjects;
 
-public record SaleOrderCreated(Guid Id, Guid UserId) : DomainEvent;
+namespace OrderApi.Orders.Domain;
+
+public record SaleOrderCreated(SaleOrderId Id, UserId UserId) : DomainEvent;

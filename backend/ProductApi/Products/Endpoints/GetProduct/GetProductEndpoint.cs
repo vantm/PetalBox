@@ -1,23 +1,22 @@
-﻿using ProductApi.Products.Domain;
+﻿using Common.Domain.ValueObjects;
+using ProductApi.Products.Domain;
+using ProductApi.Products.Services;
 using System.Diagnostics;
 
 namespace ProductApi.Products.Endpoints.GetProduct;
 
-public readonly struct GetProductEndpoint<RT>
-    where RT : struct, HasCancel<RT>, HasServiceProvider
+public readonly struct GetProductEndpoint
 {
-    public static Aff<RT, IResult> New(Guid id) =>
+    public static Eff<RT, IResult> New<RT>(Guid id) where RT : IAppRuntime =>
         from rt in runtime<RT>()
-        from repo in rt.RequiredService<IProductRepo<RT>>()
-        from logger in rt.RequiredService<ILogger<GetProductEndpoint<RT>>>()
+        from repo in rt.RequiredService<IProductQueryService<RT>>()
+        from logger in rt.RequiredService<ILogger<GetProductEndpoint>>()
         from time in rt.RequiredService<TimeProvider>()
-        from __0 in tap(() => logger.LogInformation("Finding product {id} has started at {time}", id, time.GetLocalNow()))
+        from __0 in liftEff(() => logger.LogInformation("Finding product {id} has started at {time}", id, time.GetLocalNow()))
         from sw in SuccessEff(Stopwatch.StartNew())
-        from product in repo.of(ProductId.FromValue(id))
-        from __1 in tap(() => sw.Stop())
-        from __2 in tap(() => logger.LogInformation("Finding product {id} has completed in {time} ms", id, sw.ElapsedMilliseconds))
-        from mapper in rt.RequiredService<ProductMapper>()
-        from dto in mapper.MapToProductDtoEff(product)
+        from dto in repo.of(ProductId.FromValue(id))
+        from __1 in liftEff(sw.Stop)
+        from __2 in liftEff(() => logger.LogInformation("Finding product {id} has completed in {time} ms", id, sw.ElapsedMilliseconds))
         select Results.Ok(dto);
 }
 

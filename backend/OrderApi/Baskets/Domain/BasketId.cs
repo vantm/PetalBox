@@ -1,12 +1,7 @@
-﻿namespace OrderApi.Baskets.Domain;
+﻿using Common.Domain.ValueObjects;
 
-public class BasketId : NewType<BasketId, Guid>
+namespace OrderApi.Baskets.Domain;
+
+public sealed record BasketId(Guid id) : GuidId<BasketId>(id)
 {
-    private BasketId(Guid value) : base(value)
-    {
-    }
-
-    public static BasketId NewId() => new(Guid.NewGuid());
-
-    public static BasketId FromGuid(Guid value) => new(value);
 }

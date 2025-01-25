@@ -2,21 +2,20 @@
 
 namespace ProductApi.Products.Endpoints.CreateProduct;
 
-public readonly struct CreateProductEndpoint<RT>
-    where RT : struct, HasCancel<RT>, HasServiceProvider
+public readonly struct CreateProductEndpoint
 {
-    public static Aff<RT, IResult> New(CreateProductRequest body) =>
+    public static Eff<RT, IResult> New<RT>(CreateProductRequest body) where RT : IAppRuntime =>
         from rt in runtime<RT>()
-        from __0 in guard(notnull(body), () => AppErrors.ValidationError("Body", "The request body must not be null"))
-        from validator in rt.RequiredService<IValidator<CreateProductRequest>>()
-        from validationResult in SuccessEff(validator.Validate(body))
-        from __1 in guard(validationResult.IsValid, AppErrors.ValidationError(validationResult.ToDictionary()))
+        from _0 in guard(notnull(body), () => AppErrors.ValidationError("Body", "The request body must not be null"))
+        from val in rt.RequiredService<IValidator<CreateProductRequest>>()
+        from res in liftEff(() => val.Validate(body))
+        from _1 in guard(res.IsValid, AppErrors.ValidationError(res.ToDictionary()))
         from time in rt.RequiredService<TimeProvider>()
-        from newProduct in SuccessEff(Product.New(new(body.Title), new(body.Price), time))
+        from prod in liftEff(() => Product.New(new(body.Title), new(body.Price), time))
         from repo in rt.RequiredService<IProductRepo<RT>>()
-        from product in repo.insert(newProduct)
-        from mapper in rt.RequiredService<ProductMapper>()
-        from dto in mapper.MapToProductDtoEff(product)
+        from _2 in repo.insert(prod)
+        from map in rt.RequiredService<ProductMapper>()
+        from dto in liftEff(() => map.MapToProductDto(prod))
         select Results.CreatedAtRoute("GetProduct", new { dto.Id }, dto);
 }
 

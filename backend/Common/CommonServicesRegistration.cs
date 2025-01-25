@@ -1,4 +1,5 @@
-﻿using Common.Implements;
+﻿using Common.Dapr.Internals;
+using Common.Domain;
 
 namespace Common;
 
@@ -17,7 +18,15 @@ public class CommonServicesRegistration : IServicesRegistration
 
         services.AddHttpContextAccessor();
 
-        services.AddScoped<WebRuntime>();
+        services.AddScoped<IAppRuntime>(sp =>
+        {
+            var httpContext = sp.GetRequiredService<IHttpContextAccessor>().HttpContext;
+            if (httpContext == null)
+            {
+                throw new ValueIsNullException("The scoped context has no access to HttpContext");
+            }
+            return new AppRuntime(httpContext);
+        });
 
         services.AddSingleton(TimeProvider.System);
 

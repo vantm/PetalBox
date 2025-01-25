@@ -1,25 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>6b44688d-3676-417f-8f8d-fefa523bcebf</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Carter" Version="8.2.1" />
-    <PackageReference Include="Dapr.Client" Version="1.13.1" />
-    <PackageReference Include="Dapr.Workflow" Version="1.13.1" />
-    <PackageReference Include="Duende.IdentityServer" Version="7.0.5" />
-    <PackageReference Include="FluentValidation" Version="11.9.2" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
-    <PackageReference Include="LanguageExt.Core" Version="4.4.8" />
-    <PackageReference Include="Riok.Mapperly" Version="3.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Carter" />
+    <PackageReference Include="Dapr.Client" />
+    <PackageReference Include="Dapr.Workflow" />
+    <PackageReference Include="Duende.IdentityServer" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="LanguageExt.Core" />
+    <PackageReference Include="Riok.Mapperly" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
 </Project>

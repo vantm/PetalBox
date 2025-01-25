@@ -1,15 +1,15 @@
-﻿using ProductApi.Products.Domain;
+﻿using Common.Models;
+using ProductApi.Products.Services;
 using System.Text.Json;
 
 namespace ProductApi.Products.Endpoints.ListProduct;
 
-public readonly struct ListProductEndpoint<RT>
-    where RT : struct, HasCancel<RT>, HasServiceProvider
+public readonly struct ListProductEndpoint
 {
-    public static Aff<RT, IResult> New(PageParams pageParams) =>
+    public static Eff<RT, IResult> New<RT>(PageParams pageParams) where RT : IAppRuntime =>
         from rt in runtime<RT>()
-        from log in rt.RequiredService<ILogger<ListProductEndpoint<RT>>>()
-        from _log1 in tap(() =>
+        from log in rt.RequiredService<ILogger<ListProductEndpoint>>()
+        from _log1 in liftEff(() =>
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
@@ -21,9 +21,7 @@ public readonly struct ListProductEndpoint<RT>
         from validator in rt.RequiredService<IValidator<PageParams>>()
         from validationResult in SuccessEff(validator.Validate(pageParams))
         from __0 in guard(validationResult.IsValid, () => AppErrors.ValidationError(validationResult.ToDictionary()))
-        from repo in rt.RequiredService<IProductRepo<RT>>()
-        from products in repo.all(SelectParams.FromPaging(pageParams))
-        from mapper in rt.RequiredService<ProductMapper>()
-        from dtos in mapper.MapToProductDtoEff(products)
+        from repo in rt.RequiredService<IProductQueryService<RT>>()
+        from dtos in repo.all(SelectParams.FromPaging(pageParams))
         select Results.Ok(dtos);
 }

@@ -1,3 +1,8 @@
-﻿namespace ProductApi.Products.Domain;
+﻿using Common.Domain.ValueObjects;
 
-public record ProductTitle(string Value) : NewValueType<ProductTitle, string>(Value);
+namespace ProductApi.Products.Domain;
+
+public record ProductTitle(string Value) : NewValueType<ProductTitle, string>(Value)
+{
+    public static readonly ProductTitle InitialValue = new("New product");
+}
